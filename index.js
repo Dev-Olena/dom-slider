@@ -18,47 +18,29 @@ const slides = [{
     alt: 'landscape6'
 }]
 
-// Get elements
 const [prevBtn, nextBtn] = document.querySelectorAll('button');
 const sliderImg = document.querySelector('.sliderWrapper img');
 
-let currentSlideIndex = 0;
 
-updateSlider(currentSlideIndex);
+const slider = new Slider(slides);
 
-// Event listener
-prevBtn.addEventListener('click', prevBtnHandler);
-nextBtn.addEventListener('click', nextBtnHandler);
+function updateSlider() {
+    sliderImg.src = slider.currentSlide.src;
+    sliderImg.alt = slider.currentSlide.alt
+}
 
-function prevBtnHandler () {
-    if(currentSlideIndex === 0) {
-        currentSlideIndex = slides.length - 1;
-    } else {
-        currentSlideIndex--;
-    }
-    updateSlider(currentSlideIndex);
-};
-
-function nextBtnHandler () {
-    if(currentSlideIndex < slides.length -1) {
-       currentSlideIndex++;
-    } else {
-        currentSlideIndex = 0;
-    }
-    updateSlider(currentSlideIndex);
-};
-
-function updateSlider(currentSlideIndex) {
-    sliderImg.src = slides[currentSlideIndex].src;
-    sliderImg.alt = slides[currentSlideIndex].alt; 
-    
-    sliderImg.onerror = () => {
-        sliderImg.src='./images/question.jpeg'
+function createBtnHandler(direction) {
+    return function(){
+        slider.currentIndex = slider[direction];
+        updateSlider(); 
     }
 }
 
+prevBtn.addEventListener('click', createBtnHandler('prev'))
 
+nextBtn.addEventListener('click', createBtnHandler('next'));
 
+updateSlider();
 
 
 
